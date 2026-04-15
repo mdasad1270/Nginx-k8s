@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemonset
+  namespace: nginx
+  labels:
+    apps: nginx
+spec:
+    selector:
+      matchLabels:
+        apps: nginx
+    template:
+      metadata:
+        labels:
+          apps: nginx
+      spec:
+        containers:
+          - name: nginx-daemon-ctr
+            image: nginx:latest
+            ports:
+              - containerPort: 80
+            volumeMounts:
+              - mountPath: /var/www/html
+                name: my-volume  # can give any name
+        volumes:
+          - name: my-volume
+            persistentVolumeClaim:
+              claimName: local-pvc
+

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-replicaset
+  namespace: nginx
+  labels:
+    apps: nginx
+spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        apps: nginx
+    template:
+      metadata:
+        labels:
+          apps: nginx
+      spec:
+        containers:
+          - name: nginx-ctr
+            image: nginx:latest
+            ports:
+              - containerPort: 80
+            volumeMounts:
+              - mountPath: /var/www/html
+                name: my-volume  # can give any name
+        volumes:
+          - name: my-volume
+            persistentVolumeClaim:
+              claimName: local-pvc
+
